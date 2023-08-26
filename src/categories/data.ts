@@ -1,8 +1,9 @@
 // Imports
-import * as db from '../database';
-import * as meta from '../meta';
-import * as plugins from '../plugins';
-import * as utils from '../utils';
+// import * as validator from 'validator';
+const db = require('../database');
+const meta = require('../meta');
+const plugins = require('../plugins');
+const utils = require('../utils');
 
 // Helper function to escape HTML characters
 function escapeHtml(input: string): string {
@@ -35,7 +36,7 @@ interface Categories {
 }
 
 // Exported function that attaches methods to the Categories object
-module.exports = function (Categories: Categories) {
+exports = function (Categories: Categories) {
     Categories.getCategoriesFields = async function (cids, fields) {
         if (!Array.isArray(cids) || !cids.length) {
             return [];
