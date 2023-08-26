@@ -35,7 +35,7 @@ interface Categories {
 }
 
 // Exported function that attaches methods to the Categories object
-exports = function (Categories: Categories) {
+module.exports = function (Categories: Categories) {
     Categories.getCategoriesFields = async function (cids, fields) {
         if (!Array.isArray(cids) || !cids.length) {
             return [];

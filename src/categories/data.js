@@ -48,7 +48,7 @@ const intFields = [
     'minTags', 'maxTags', 'postQueue', 'subCategoriesPerPage',
 ];
 // Exported function that attaches methods to the Categories object
-exports = function (Categories) {
+module.exports = function (Categories) {
     Categories.getCategoriesFields = function (cids, fields) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!Array.isArray(cids) || !cids.length) {
