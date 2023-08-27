@@ -1,9 +1,9 @@
 // Imports
 // import * as validator from 'validator';
-const db = require('../database');
-const meta = require('../meta');
-const plugins = require('../plugins');
-const utils = require('../utils');
+import * as db from '../database';
+import * as meta from '../meta';
+import * as plugins from '../plugins';
+import * as utils from '../utils';
 
 // Helper function to escape HTML characters
 function escapeHtml(input: string): string {
