@@ -31,7 +31,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 // Imports
 // import * as validator from 'validator';
 const db = __importStar(require("../database"));
@@ -48,8 +47,7 @@ const intFields = [
     'topic_count', 'post_count', 'numRecentReplies',
     'minTags', 'maxTags', 'postQueue', 'subCategoriesPerPage',
 ];
-// Exported function that attaches methods to the Categories object
-exports = function (Categories) {
+module.exports = function (Categories) {
     Categories.getCategoriesFields = function (cids, fields) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!Array.isArray(cids) || !cids.length) {
