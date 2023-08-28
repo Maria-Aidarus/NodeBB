@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -31,15 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 // Imports
-// import * as validator from 'validator';
-const db = __importStar(require("../database"));
-const meta = __importStar(require("../meta"));
-const plugins = __importStar(require("../plugins"));
-const utils = __importStar(require("../utils"));
+const database_1 = __importDefault(require("../database"));
+const meta_1 = __importDefault(require("../meta"));
+const plugins_1 = __importDefault(require("../plugins"));
+const utils_1 = __importDefault(require("../utils"));
 // Helper function to escape HTML characters
 function escapeHtml(input) {
-    return input.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return input.replace(/&(?!\w+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 // Array of fields with integer values
 const intFields = [
@@ -55,9 +34,9 @@ module.exports = function (Categories) {
             }
             const keys = cids.map(cid => `category:${cid}`);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-            const categories = yield db.getObjects(keys, fields);
+            const categories = yield database_1.default.getObjects(keys, fields);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-            const result = yield plugins.hooks.fire('filter:category.getFields', {
+            const result = yield plugins_1.default.hooks.fire('filter:category.getFields', {
                 cids: cids,
                 categories: categories,
                 fields: fields,
@@ -68,9 +47,9 @@ module.exports = function (Categories) {
                     const useDefault = !category.hasOwnProperty(fieldName) ||
                         category[fieldName] === null ||
                         category[fieldName] === '' ||
-                        !utils.isNumber(category[fieldName]);
+                        !utils_1.default.isNumber(category[fieldName]);
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
-                    category[fieldName] = useDefault ? meta.config[defaultField] : category[fieldName];
+                    category[fieldName] = useDefault ? meta_1.default.config[defaultField] : category[fieldName];
                 }
             }
             function modifyCategory(category, fields) {
@@ -81,7 +60,7 @@ module.exports = function (Categories) {
                 defaultIntField(category, fields, 'maxTags', 'maximumTagsPerTopic');
                 defaultIntField(category, fields, 'postQueue', 'postQueue');
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-                db.parseIntFields(category, intFields, fields);
+                database_1.default.parseIntFields(category, intFields, fields);
                 const escapeFields = ['name', 'color', 'bgColor', 'backgroundImage', 'imageClass', 'class', 'link'];
                 escapeFields.forEach((field) => {
                     if (category.hasOwnProperty(field)) {
@@ -110,6 +89,7 @@ module.exports = function (Categories) {
             return modifiedCategories;
         });
     };
+    // functions within the Category interface
     Categories.getCategoryData = function (cid) {
         return __awaiter(this, void 0, void 0, function* () {
             const categories = yield Categories.getCategoriesFields([cid], []);
@@ -142,13 +122,13 @@ module.exports = function (Categories) {
     Categories.setCategoryField = function (cid, field, value) {
         return __awaiter(this, void 0, void 0, function* () {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-            yield db.setObjectField(`category:${cid}`, field, value);
+            yield database_1.default.setObjectField(`category:${cid}`, field, value);
         });
     };
     Categories.incrementCategoryFieldBy = function (cid, field, value) {
         return __awaiter(this, void 0, void 0, function* () {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-            yield db.incrObjectFieldBy(`category:${cid}`, field, value);
+            yield database_1.default.incrObjectFieldBy(`category:${cid}`, field, value);
         });
     };
 };

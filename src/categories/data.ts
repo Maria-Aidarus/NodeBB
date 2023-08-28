@@ -1,13 +1,12 @@
 // Imports
-// import * as validator from 'validator';
-import * as db from '../database';
-import * as meta from '../meta';
-import * as plugins from '../plugins';
-import * as utils from '../utils';
+import db from '../database';
+import meta from '../meta';
+import plugins from '../plugins';
+import utils from '../utils';
 
 // Helper function to escape HTML characters
 function escapeHtml(input: string): string {
-    return input.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return input.replace(/&(?!\w+;)/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 // Array of fields with integer values
@@ -106,7 +105,7 @@ export = function (Categories: Categories) {
 
         return modifiedCategories;
     };
-
+    // functions within the Category interface
     Categories.getCategoryData = async function (cid) {
         const categories = await Categories.getCategoriesFields([cid], []);
         return categories && categories.length ? categories[0] : null;
